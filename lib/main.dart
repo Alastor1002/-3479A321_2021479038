@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+const String svgString = 'assets/icons/8666582_chevrons_up_icon.svg';
 
 void main() {
   runApp(const MyApp());
@@ -80,6 +83,8 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            SvgPicture.asset(svgString, width: 100,
+              height: 100,),
             const Text('You have pushed the button this many times:'),
             Text(
               '$_counter',
