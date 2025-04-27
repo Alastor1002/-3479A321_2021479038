@@ -1,99 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-const String svgString = 'assets/icons/8666582_chevrons_up_icon.svg';
+import 'pages/home_page.dart'; 
 
 void main() {
-  runApp(const MyApp());
+  runApp(const CardExampleApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class CardExampleApp extends StatelessWidget {
+  const CardExampleApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Devil May Cry App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-  
-  void _decrementCounter() {
-    setState(() {
-      _counter--;
-    });
-  }
-  void _resetCounter() {
-    setState(() {
-      _counter = 0;
-    });
-  }
-
-  List<Widget> _buildFooterButtons() {
-    return [
-      IconButton(
-        icon: const Icon(Icons.remove, color: Colors.purple),
-        tooltip: 'Restar',
-        onPressed: _decrementCounter,
-      ),
-      IconButton(
-        icon: const Icon(Icons.add, color: Colors.purple),
-        tooltip: 'Sumar',
-        onPressed: _incrementCounter,
-      ),
-      IconButton(
-        icon: const Icon(Icons.refresh, color: Colors.purple),
-        tooltip: 'Reiniciar',
-        onPressed: _resetCounter,
-      ),
-    ];
-  }
-
- @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SvgPicture.asset(svgString, width: 100,
-              height: 100,),
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        brightness: Brightness.dark,
+        primaryColor: Color(0xFF8B0000),
+        scaffoldBackgroundColor: Colors.black,
+        cardColor: Color(0xFF8B0000),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF8B0000),
+          foregroundColor: Colors.white,
+        ),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: Colors.white),
+          bodyMedium: TextStyle(color: Colors.white70),
+        ),
+        iconTheme: const IconThemeData(
+          color: Color(0xFFB22222),
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Color(0xFF8B0000),
+          foregroundColor: Colors.white,
         ),
       ),
-      persistentFooterButtons: _buildFooterButtons(),
+      home: const MyHomePage(title: 'Devil May Cry Home'),
     );
   }
 }
