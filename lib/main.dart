@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'pages/home_page.dart'; 
+import 'package:provider/provider.dart'; 
+import 'package:application_laboratorio/provider/app_data.dart';
+import 'pages/home_page.dart';
+
 
 void main() {
-  runApp(const CardExampleApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => AppData(),
+      child: const CardExampleApp(),
+    ),
+  );
 }
 
 class CardExampleApp extends StatelessWidget {
@@ -15,9 +22,9 @@ class CardExampleApp extends StatelessWidget {
       title: 'Devil May Cry App',
       theme: ThemeData(
         brightness: Brightness.dark,
-        primaryColor: Color(0xFF8B0000),
+        primaryColor: const Color(0xFF8B0000),
         scaffoldBackgroundColor: Colors.black,
-        cardColor: Color(0xFF8B0000),
+        cardColor: const Color(0xFF8B0000),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF8B0000),
           foregroundColor: Colors.white,

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:application_laboratorio/pages/about_page.dart';
 import 'package:application_laboratorio/pages/list_content_page.dart';
+import 'package:provider/provider.dart';
+import 'package:application_laboratorio/provider/app_data.dart'; 
 
-const String svgString = 'assets/icons/8666582_chevrons_up_icon.svg';
 const String aIcon = "assets/icons/A.svg";
 const String bIcon = "assets/icons/B.svg";
 const String cIcon = "assets/icons/C.svg";
@@ -11,74 +12,140 @@ const String dIcon = "assets/icons/D.svg";
 const String sIcon = "assets/icons/S.svg";
 
 String getIconForCounter(int counter) {
-  if (counter >= 20) {
-    return sIcon;
-  } else if (counter >= 15) {
-    return aIcon;
-  } else if (counter >= 10) {
-    return bIcon;
-  } else if (counter >= 5) {
-    return cIcon;
-  } else {
-    return dIcon;
-  }
+  if (counter >= 20) return sIcon;
+  if (counter >= 15) return aIcon;
+  if (counter >= 10) return bIcon;
+  if (counter >= 5) return cIcon;
+  return dIcon;
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() {
+    print("createState: Se crea el estado del widget");
+    return _MyHomePageState();
+  }
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-  
-  void _decrementCounter() {
-    setState(() {
-      _counter--;
-    });
-  }
-  
-  void _resetCounter() {
-    setState(() {
-      _counter = 0;
-    });
-  }
-
-  List<Widget> _buildFooterButtons() {
-    return [
-      IconButton(
-        icon: const Icon(Icons.remove),
-        tooltip: 'Restar',
-        onPressed: _decrementCounter,
-      ),
-      IconButton(
-        icon: const Icon(Icons.add),
-        tooltip: 'Sumar',
-        onPressed: _incrementCounter,
-      ),
-      IconButton(
-        icon: const Icon(Icons.refresh),
-        tooltip: 'Reiniciar',
-        onPressed: _resetCounter,
-      ),
-    ];
+  _MyHomePageState() {
+    print("Constructor _MyHomePageState. mounted: $mounted");
   }
 
   @override
+  void initState() {
+    super.initState();
+    print("initState: Widget insertado en el árbol. mounted: $mounted");
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    print("didChangeDependencies: Dependencias cambiaron.");
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    print("setState: Se actualiza el estado del widget.");
+    super.setState(fn);
+  }
+
+  @override
+  void didUpdateWidget(covariant MyHomePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print("didUpdateWidget: Widget actualizado.");
+  }
+
+  @override
+  void deactivate() {
+    print("deactivate: Widget removido temporalmente del árbol.");
+    super.deactivate();
+  }
+
+  @override
+  void dispose() {
+    print("dispose: Widget eliminado permanentemente.");
+    super.dispose();
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    print("reassemble: Hot reload ejecutado.");
+  }
+
+  List<Widget> _buildFooterButtons(BuildContext context) {
+  final appData = context.read<AppData>();
+  final List<Widget> buttons = [];
+ 
+  if (appData.resetEnabled) {
+    buttons.add(
+      IconButton(
+        icon: const Icon(Icons.remove),
+        tooltip: 'Restar',
+        onPressed: () {
+          print("Resto");
+          appData.decrementCounter();
+        },
+      ),
+    );
+  } else {
+    buttons.add(
+      IconButton(
+        icon: const Icon(Icons.remove, color: Colors.grey),
+        tooltip: 'Restar (deshabilitado)',
+        onPressed: null,
+      ),
+    );
+  }
+
+  buttons.add(
+    IconButton(
+      icon: const Icon(Icons.add),
+      tooltip: 'Sumar',
+      onPressed: () {
+        print("Sumo");
+        appData.incrementCounter();
+      },
+    ),
+  );
+
+  if (appData.resetEnabled) {
+    buttons.add(
+      IconButton(
+        icon: const Icon(Icons.refresh),
+        tooltip: 'Reiniciar',
+        onPressed: () {
+          print("Reseteo");
+          appData.resetCounter();
+        },
+      ),
+    );
+  } else {
+    buttons.add(
+      IconButton(
+        icon: const Icon(Icons.refresh, color: Colors.grey),
+        tooltip: 'Reiniciar (deshabilitado)',
+        onPressed: null,
+      ),
+    );
+  }
+
+  return buttons;
+}
+
+  @override
   Widget build(BuildContext context) {
+    print("build: Se construye la UI del widget.");
+
+    final appData = context.watch<AppData>();
+    final counter = appData.counter;
+
     return Scaffold(
       appBar: AppBar(
-        //backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
       body: Center(
@@ -92,15 +159,15 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SvgPicture.asset(getIconForCounter(_counter), width: 100, height: 100),
+                SvgPicture.asset(getIconForCounter(counter), width: 100, height: 100),
                 const SizedBox(height: 20),
-                const Text(
-                  '¡Bienvenido a Flutter!',
-                  style: TextStyle(fontSize: 24, color: Colors.white),
+                Text(
+                  '¡Bienvenido ${appData.userName}!', 
+                  style: const TextStyle(fontSize: 24, color: Colors.white),
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Contador: $_counter',
+                  'Contador: $counter',
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 20),
@@ -128,7 +195,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      persistentFooterButtons: _buildFooterButtons(),
+      persistentFooterButtons: _buildFooterButtons(context),
     );
   }
 }
